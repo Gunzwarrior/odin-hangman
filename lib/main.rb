@@ -1,3 +1,3 @@
 require_relative 'game'
 
-Game.new.solution
+Game.new.start

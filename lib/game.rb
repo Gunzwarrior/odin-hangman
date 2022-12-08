@@ -1,33 +1,54 @@
 require_relative 'display'
 require_relative 'player'
+require_relative 'board'
 
 # Game class containing the game's logic 
 class Game
   include Display
 
-  attr_accessor :solution
+  attr_accessor :solution, :board
 
   def initialize
     @solution = pick_solution
     @player = Player.new
+    @board = Board.new
+  end
+
+  def start
+    puts rules
+    puts command_list
+    print prompt
+    select_game
+    play
   end
 
   def play
-    puts rules
-    puts command_list
+    p solution
+    p board.solution
+    p validity_checker(gets.chomp)
   end 
 
-  def select_game(choice)
+  def validity_checker(input)
+    true if input.match?(/[a-z]/) && input.length == 1
+    true if input == 'exit'
+  end  
+  
+  def select_game
     keep_going = true
     while keep_going
+      choice = gets.chomp
       if choice == ''
-        # start new game
+        hide_solution(solution)
+        keep_going = false
       elsif choice.downcase == 'exit'
-        # exit game
+        # code to save game. Just exit for now
+        exit
       elsif choice.downcase == 'load'
-        # load game
+        # code to load game. Just message for now
+        puts 'Not yet implemented'
       else
         puts command_list
+        print prompt
       end
     end
   end
@@ -39,7 +60,11 @@ class Game
       line = solution_string.readline.chomp
       solution_array.push(line) if line.length >= 5 && line.length <= 12
     end
-    solution_array.sample
+    solution_array.sample.split('')
+  end
+
+  def hide_solution(solution)
+    board.solution = Array.new(solution.length, '_')
   end
 
 end
