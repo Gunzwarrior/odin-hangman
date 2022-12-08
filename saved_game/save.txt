@@ -1,0 +1,1 @@
+{"solution":["a","r","r","a","n","g","e","m","e","n","t"],"mistakes":2,"guesses":["d","e","g","h"],"board_solution":["_","_","_","_","_","g","e","_","e","_","_"]}

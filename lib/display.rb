@@ -21,8 +21,24 @@ module Display
     COMMAND_LIST
   end
 
+  def play_rules
+    <<~PLAY_RULES
+      - Enter a letter to guess
+      - Enter 'exit' to save and exit
+
+    PLAY_RULES
+  end
+
   def prompt
     '> '
   end
+
+  def win
+    'Congratulation, you won !'
+  end
   
+  def lose
+    'No more tries. You lose.'
+  end
+
 end

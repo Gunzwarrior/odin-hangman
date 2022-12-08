@@ -1,6 +1,6 @@
 require_relative 'display'
-require_relative 'player'
 require_relative 'board'
+require 'json'
 
 # Game class containing the game's logic 
 class Game
@@ -10,7 +10,6 @@ class Game
 
   def initialize
     @solution = pick_solution
-    @player = Player.new
     @board = Board.new
   end
 
@@ -22,17 +21,88 @@ class Game
     play
   end
 
-  def play
-    p solution
-    p board.solution
-    p validity_checker(gets.chomp)
-  end 
+  def save_game
+    serialized_state = serialize_state
+    Dir.mkdir('saved_game') unless Dir.exist?('saved_game')
+    save_file = 'saved_game/save.txt'
+    File.open(save_file, 'w') do |file|
+      file.puts(serialized_state)
+    end
+  end
 
-  def validity_checker(input)
-    true if input.match?(/[a-z]/) && input.length == 1
-    true if input == 'exit'
-  end  
+  def serialize_state
+    saved_data_hash = {
+      solution: solution,
+      mistakes: board.mistake,
+      guesses: board.guesses,
+      board_solution: board.solution}
+    JSON.dump (saved_data_hash)
+  end
+
+  def load_game
+    save_file = 'saved_game/save.txt'
+    saved_hash = JSON.load File.read(save_file)
+    solution = saved_hash[:solution]
+    board.mistake = saved_hash[:mistakes]
+    board.guesses = saved_hash[:guesses]
+    board.solution = saved_hash[:board_solution]
+    p saved_hash
+    p saved_hash[solution]
+    p saved_hash[:mistakes]
+    p saved_hash[:guesses]
+    p saved_hash[:board_solution]
+    p solution
+    p board.mistake
+    p board.guesses
+    p board.solution
+  end
+
+  def play
+    puts "#{board.solution.join(' ')} is the word to guess :"
+    puts play_rules
+    print prompt
+    keep_going = true
+    tries = 0
+    while keep_going
+      input = gets.chomp.downcase
+      if input.match?(/[a-z]/) && input.length == 1
+        check_match(input)
+        tries += 1
+        board.show_feedback
+        break if game_over?(tries)
+        print prompt
+      elsif input == 'exit'
+        save_game
+        exit
+      else
+        puts play_rules
+        print prompt
+      end
+    end
+  end
+
+
+  def game_over?(tries)
+    if board.solution == solution
+      puts win
+      puts "#{solution.join('')} was the word to find"
+      true
+    elsif board.mistake == 7
+      puts lose
+      puts "#{solution.join('')} was the word to find"
+      true
+    end
+  end
   
+  def check_match(input)
+    board.guesses.push(input)
+    temp_solution = board.solution.dup 
+    solution.each_index do |index|
+      board.solution[index] = solution[index] if solution[index] == input
+    end
+    board.one_mistake if temp_solution == board.solution
+  end
+
   def select_game
     keep_going = true
     while keep_going
@@ -41,11 +111,10 @@ class Game
         hide_solution(solution)
         keep_going = false
       elsif choice.downcase == 'exit'
-        # code to save game. Just exit for now
         exit
       elsif choice.downcase == 'load'
-        # code to load game. Just message for now
-        puts 'Not yet implemented'
+        load_game
+        keep_going = false
       else
         puts command_list
         print prompt

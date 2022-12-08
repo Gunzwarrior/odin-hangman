@@ -1,12 +1,18 @@
 # Board class used to display game informations to the player
 class Board
-  attr_accessor :solution, :tries
+  attr_accessor :solution, :mistake, :guesses
   def initialize
     @solution = nil
-    @tries = []
+    @mistake = 0
+    @guesses = []
   end
 
-  def show_solution
-    puts solution
+  def one_mistake
+    @mistake += 1
+  end
+
+  def show_feedback
+    puts "#{solution.join(' ')} | letters tried #{guesses.uniq.join(', ')} | #{mistake} / 7 mistakes allowed."
+    puts
   end
 end
