@@ -12,7 +12,7 @@ class Board
   end
 
   def show_feedback
-    puts "#{solution.join(' ')} | letters tried #{guesses.uniq.join(', ')} | #{mistake} / 7 mistakes allowed."
+    puts "#{solution.join(' ')} | letters tried : #{guesses.uniq.join(', ')} | #{mistake} / 7 mistakes allowed."
     puts
   end
 end

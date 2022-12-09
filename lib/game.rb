@@ -1,6 +1,6 @@
 require_relative 'display'
 require_relative 'board'
-require 'json'
+require 'yaml'
 
 # Game class containing the game's logic 
 class Game
@@ -36,29 +36,24 @@ class Game
       mistakes: board.mistake,
       guesses: board.guesses,
       board_solution: board.solution}
-    JSON.dump (saved_data_hash)
+    YAML.dump (saved_data_hash)
   end
 
   def load_game
     save_file = 'saved_game/save.txt'
-    saved_hash = JSON.load File.read(save_file)
-    solution = saved_hash[:solution]
+    saved_hash = YAML.safe_load(File.read(save_file), permitted_classes: [Symbol])
+    @solution = saved_hash[:solution]
     board.mistake = saved_hash[:mistakes]
     board.guesses = saved_hash[:guesses]
     board.solution = saved_hash[:board_solution]
-    p saved_hash
-    p saved_hash[solution]
-    p saved_hash[:mistakes]
-    p saved_hash[:guesses]
-    p saved_hash[:board_solution]
-    p solution
-    p board.mistake
-    p board.guesses
-    p board.solution
+    @solution = saved_hash[:solution]
+    board.mistake = saved_hash[:mistakes]
+    board.guesses = saved_hash[:guesses]
+    board.solution = saved_hash[:board_solution]
   end
 
   def play
-    puts "#{board.solution.join(' ')} is the word to guess :"
+    puts board.show_feedback
     puts play_rules
     print prompt
     keep_going = true
