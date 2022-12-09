@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 # Board class used to display game informations to the player
 class Board
   attr_accessor :solution, :mistake, :guesses
+
   def initialize
     @solution = nil
     @mistake = 0

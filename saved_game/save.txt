@@ -1,23 +1,29 @@
 ---
 :solution:
+- s
+- i
+- m
+- p
 - l
+- i
+- f
+- i
 - e
-- s
-- s
-- o
-- "n"
-:mistakes: 4
+- d
+:mistakes: 2
 :guesses:
 - a
 - e
 - i
 - o
-- u
-- "y"
 :board_solution:
 - _
+- i
+- _
+- _
+- _
+- i
+- _
+- i
 - e
-- _
-- _
-- o
 - _

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative 'display'
 require_relative 'board'
 require 'yaml'
 
-# Game class containing the game's logic 
+# Game class containing the game's logic
 class Game
   include Display
 
@@ -35,8 +37,9 @@ class Game
       solution: solution,
       mistakes: board.mistake,
       guesses: board.guesses,
-      board_solution: board.solution}
-    YAML.dump (saved_data_hash)
+      board_solution: board.solution
+    }
+    YAML.dump(saved_data_hash)
   end
 
   def load_game
@@ -64,7 +67,8 @@ class Game
         check_match(input)
         tries += 1
         board.show_feedback
-        break if game_over?(tries)
+        break if game_over?
+
         print prompt
       elsif input == 'exit'
         save_game
@@ -76,8 +80,7 @@ class Game
     end
   end
 
-
-  def game_over?(tries)
+  def game_over?
     if board.solution == solution
       puts win
       puts "#{solution.join('')} was the word to find"
@@ -88,10 +91,10 @@ class Game
       true
     end
   end
-  
+
   def check_match(input)
     board.guesses.push(input)
-    temp_solution = board.solution.dup 
+    temp_solution = board.solution.dup
     solution.each_index do |index|
       board.solution[index] = solution[index] if solution[index] == input
     end
@@ -102,11 +105,10 @@ class Game
     keep_going = true
     while keep_going
       choice = gets.chomp
+      exit if choice.downcase == 'exit'
       if choice == ''
         hide_solution(solution)
         keep_going = false
-      elsif choice.downcase == 'exit'
-        exit
       elsif choice.downcase == 'load'
         load_game
         keep_going = false
@@ -130,5 +132,4 @@ class Game
   def hide_solution(solution)
     board.solution = Array.new(solution.length, '_')
   end
-
 end

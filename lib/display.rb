@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 
 # Display module with all the game's text
 module Display
-
   def rules
     <<~RULES
       Let's play a game of Hangman.
@@ -9,7 +9,6 @@ module Display
       a letter one at a time.
       You can have 7 wrong guesses before you lose.
     RULES
-
   end
 
   def command_list
@@ -36,9 +35,8 @@ module Display
   def win
     'Congratulation, you won !'
   end
-  
+
   def lose
     'No more tries. You lose.'
   end
-
 end
